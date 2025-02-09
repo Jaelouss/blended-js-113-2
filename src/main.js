@@ -1,16 +1,24 @@
-/*
-  Створи список справ.
-  На сторінці є два інпути які має вводиться назва і текст задачі.
-  Після натискання на кнопку "Add" завдання додається до списку #task-list.
+import refs from './js/refs';
+import { nanoid } from 'nanoid';
+import { markUpItem, markUpList } from './js/markup-tasks';
+import { renderTasks } from './js/render-tasks';
+import { getLocalData, setLocalData } from './js/local-storage-api';
 
-  У кожної картки має бути кнопка "Delete", щоб можна було
-  прибрати завдання зі списку.
-  Список із завданнями має бути доступним після перезавантаження сторінки.
+refs.form.addEventListener('submit', formSubmit);
 
-  Розмітка картки задачі
-  <li class="task-list-item">
-      <button class="task-list-item-btn">Delete</button>
-      <h3>Заголовок</h3>
-      <p>Текст</p>
-  </li>
-*/
+let localUserData = getLocalData();
+
+renderTasks(markUpList(localUserData));
+
+function formSubmit(event) {
+  event.preventDefault();
+  let userInput = {
+    id: nanoid(),
+    taskTitle: event.currentTarget.elements.taskName.value.trim(),
+    taskDescr: event.currentTarget.elements.taskDescription.value.trim(),
+  };
+  localUserData.push(userInput);
+  setLocalData(localUserData);
+
+  renderTasks(markUpItem(userInput));
+}
