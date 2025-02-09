@@ -22,3 +22,21 @@ function formSubmit(event) {
 
   renderTasks(markUpItem(userInput));
 }
+
+
+refs.list.addEventListener("click", deleteItem);
+
+function deleteItem(event) {
+  // console.log(event.target.nodeName);
+  if(event.target.nodeName !== "BUTTON") {
+    return;
+  }
+  // console.log("btn");
+  const id = event.target.closest("[data-id]").dataset.id
+  // console.log(id);
+  localUserData = localUserData.filter(data => data.id !== id) 
+  setLocalData(localUserData);
+  refs.list.innerHTML = "";
+  renderTasks(markUpList(localUserData))
+}
+
